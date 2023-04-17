@@ -13,7 +13,7 @@ func DBMigrate(conn *gorm.DB) error {
 		return conn.Error
 	}
 
-	conn.AutoMigrate(domain.User{})
+	conn.AutoMigrate(domain.User{}, domain.OrderItem{})
 	log.Println("Migration has been processed")
 
 	return nil

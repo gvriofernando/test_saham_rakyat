@@ -11,6 +11,10 @@ import (
 	userHttp "github.com/gvriofernando/test_saham_rakyat/service/user/controller/http"
 	userRepo "github.com/gvriofernando/test_saham_rakyat/service/user/repository"
 	userUseCase "github.com/gvriofernando/test_saham_rakyat/service/user/usecase"
+
+	orderItemHttp "github.com/gvriofernando/test_saham_rakyat/service/order_item/controller/http"
+	orderItemRepo "github.com/gvriofernando/test_saham_rakyat/service/order_item/repository"
+	orderItemUseCase "github.com/gvriofernando/test_saham_rakyat/service/order_item/usecase"
 )
 
 func main() {
@@ -70,6 +74,14 @@ func main() {
 	})
 	userUseCaseInstance := userUseCase.NewUserUseCase(userRepoInstance)
 	userHttp.NewUserController(e, userUseCaseInstance)
+
+	//Initialize Order Item Domain
+	orderItemRepoInstance := orderItemRepo.NewOrderItemRepository(orderItemRepo.OrderItemConfig{
+		Postgres: pgdb,
+		Redis:    redisService,
+	})
+	orderItemUseCaseInstance := orderItemUseCase.NewOrderItemUseCase(orderItemRepoInstance)
+	orderItemHttp.NewOrderItemController(e, orderItemUseCaseInstance)
 
 	e.Logger.Fatal(e.Start(":" + port))
 }
